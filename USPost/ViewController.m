@@ -103,12 +103,11 @@
 {
 //    NSString *url = AFPercentEscapedStringFromString(_textField.stringValue);
     
-    NSString *url = _textField.stringValue;
-    url = [url stringByReplacingOccurrencesOfString:@"”" withString:@"\""];
-    url = [url stringByReplacingOccurrencesOfString:@"“" withString:@"\""];
-    url = [url stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    _textField.stringValue = url;
+    _textView.string = [_textView.string stringByReplacingOccurrencesOfString:@"”" withString:@"\""];
+    _textView.string = [_textView.string stringByReplacingOccurrencesOfString:@"“" withString:@"\""];
+    _textField.stringValue = [_textField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
+    NSString *url = _textField.stringValue;
     NSDictionary *body = [_textView.string object];
     
     if (!url || !url.length || ![NSURL URLWithString:url]) {

@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="jquery.jsonview.css" />
+  <script type="text/javascript" src="jquery.min.js"></script>
+  <script type="text/javascript" src="jquery.jsonview.js"></script>
+  <script type="text/javascript">
+      function setupWebViewJavascriptBridge(callback) {
+          if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+          if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+          window.WVJBCallbacks = [callback];
+          var WVJBIframe = document.createElement('iframe');
+          WVJBIframe.style.display = 'none';
+          WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+          document.documentElement.appendChild(WVJBIframe);
+          setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+      }
+  
+     setupWebViewJavascriptBridge(function(bridge) {
+                                  bridge.registerHandler('json_view', function(data, responseCallback) {
+                                                         console.log("json_view called with:", data)
+                                                         
+                                                         $("#json").show();
+                                                         $("#json").JSONView(data);
+                                                         
+                                                         responseCallback({"success": true})
+                                             })
+                                  
+                                  bridge.registerHandler('hide_view', function(data, responseCallback) {
+                                                         console.log("hide_view called with:", data)
+                                                         
+                                                         $("#json").hide();
+                                                         
+                                                         responseCallback({"success": true})
+                                            })
+                                  
+                               })
+  </script>
+</head>
+<body>
+  <div id="json"></div>
+</body>
+</html>

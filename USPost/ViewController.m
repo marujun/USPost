@@ -3,7 +3,7 @@
 //  USPost
 //
 //  Created by marujun on 16/5/24.
-//  Copyright © 2016年 MaRuJun. All rights reserved.
+//  Copyright © 2016年 MaRuJun. All rights reserved.  https://github.com/yesmeck/jquery-jsonview
 //
 
 #import "ViewController.h"
@@ -143,7 +143,13 @@
     for (NSURLQueryItem *item in queryItems) {
         [queryDic setValue:item.value forKey:item.name];
     }
+    
     [self.requestBridge callHandler:@"json_view" data:_textView.string];
+//    [self.requestBridge callHandler:@"json_view_collapsed" data:@{@"body":body?:@{},
+//                                                                  @"method":request.HTTPMethod,
+//                                                                  @"query":queryDic,
+//                                                                  @"header":request.allHTTPHeaderFields}];
+    
     
     NSLog(@"request url: %@",request.URL.absoluteString);
     

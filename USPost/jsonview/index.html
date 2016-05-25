@@ -26,7 +26,14 @@
                                                          
                                                          responseCallback({"success": true})
                                              })
-                                  
+                                  bridge.registerHandler('json_view_collapsed', function(data, responseCallback) {
+                                                         console.log("json_view_collapsed called with:", data)
+                                                         
+                                                         $("#json").show();
+                                                         $("#json").JSONView(data, {collapsed:true});
+                                                         
+                                                         responseCallback({"success": true})
+                                              })
                                   bridge.registerHandler('hide_view', function(data, responseCallback) {
                                                          console.log("hide_view called with:", data)
                                                          

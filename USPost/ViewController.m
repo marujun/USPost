@@ -101,13 +101,12 @@
 
 - (IBAction)sendButtonAction:(NSButton *)sender
 {
-//    NSString *url = AFPercentEscapedStringFromString(_textField.stringValue);
-    
     _textView.string = [_textView.string stringByReplacingOccurrencesOfString:@"”" withString:@"\""];
     _textView.string = [_textView.string stringByReplacingOccurrencesOfString:@"“" withString:@"\""];
     _textField.stringValue = [_textField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
-    NSString *url = _textField.stringValue;
+    //处理URL中的中文
+    NSString *url = [_textField.stringValue stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSDictionary *body = [_textView.string object];
     
     if (!url || !url.length || ![NSURL URLWithString:url]) {

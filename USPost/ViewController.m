@@ -169,7 +169,7 @@
             [self.responseBridge callHandler:@"json_view" data:@{@"error":responseObject}];
         }
         else {
-            [self.responseBridge callHandler:@"json_view" data:@{@"error":error.description}];
+            [self.responseBridge callHandler:@"json_view" data:@{@"error":[error.userInfo valueForKey:NSLocalizedDescriptionKey]}];
         }
         self.indicatorView.hidden = YES;
     }];

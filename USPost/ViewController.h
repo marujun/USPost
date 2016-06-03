@@ -22,7 +22,6 @@
 @interface ViewController : NSViewController
 
 @property (weak) IBOutlet NSTextField *textField;
-@property (unsafe_unretained) IBOutlet NSTextView *textView;
 @property (weak) IBOutlet NSProgressIndicator *indicatorView;
 
 @property (weak) IBOutlet WebView *requestWebView;

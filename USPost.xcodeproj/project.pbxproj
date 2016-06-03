@@ -24,6 +24,7 @@
 		0A436E9C1CF4533400F6E440 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A436E901CF4533400F6E440 /* WebViewJavascriptBridge_JS.m */; };
 		0A436E9D1CF4533400F6E440 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A436E921CF4533400F6E440 /* WebViewJavascriptBridgeBase.m */; };
 		0A436E9E1CF4533400F6E440 /* WKWebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A436E941CF4533400F6E440 /* WKWebViewJavascriptBridge.m */; };
+		0ADB15811D0133CA00C7FE91 /* jsoneditor in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB15801D0133CA00C7FE91 /* jsoneditor */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +60,7 @@
 		0A436E921CF4533400F6E440 /* WebViewJavascriptBridgeBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridgeBase.m; sourceTree = "<group>"; };
 		0A436E931CF4533400F6E440 /* WKWebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		0A436E941CF4533400F6E440 /* WKWebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewJavascriptBridge.m; sourceTree = "<group>"; };
+		0ADB15801D0133CA00C7FE91 /* jsoneditor */ = {isa = PBXFileReference; lastKnownFileType = folder; path = jsoneditor; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +104,7 @@
 				0A436E7E1CF4533400F6E440 /* AFNetworking */,
 				0A436E8C1CF4533400F6E440 /* WebViewJavascriptBridge */,
 				0A436E7C1CF4531B00F6E440 /* jsonview */,
-				0A436E741CF452D000F6E440 /* Info.plist */,
+				0ADB15801D0133CA00C7FE91 /* jsoneditor */,
 				0A436E691CF452D000F6E440 /* Supporting Files */,
 			);
 			path = USPost;
@@ -111,6 +113,7 @@
 		0A436E691CF452D000F6E440 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0A436E741CF452D000F6E440 /* Info.plist */,
 				0A436E6A1CF452D000F6E440 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -219,6 +222,7 @@
 				0A436E701CF452D000F6E440 /* Assets.xcassets in Resources */,
 				0A436E731CF452D000F6E440 /* Main.storyboard in Resources */,
 				0A436E7D1CF4531B00F6E440 /* jsonview in Resources */,
+				0ADB15811D0133CA00C7FE91 /* jsoneditor in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

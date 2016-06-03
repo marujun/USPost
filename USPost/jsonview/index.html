@@ -16,33 +16,32 @@
           document.documentElement.appendChild(WVJBIframe);
           setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
       }
-  
-     setupWebViewJavascriptBridge(function(bridge) {
-                                  bridge.registerHandler('json_view', function(data, responseCallback) {
-                                                         console.log("json_view called with:", data)
-                                                         
-                                                         $("#json").show();
-                                                         $("#json").JSONView(data);
-                                                         
-                                                         responseCallback({"success": true})
-                                             })
-                                  bridge.registerHandler('json_view_collapsed', function(data, responseCallback) {
-                                                         console.log("json_view_collapsed called with:", data)
-                                                         
-                                                         $("#json").show();
-                                                         $("#json").JSONView(data, {collapsed:true});
-                                                         
-                                                         responseCallback({"success": true})
-                                              })
-                                  bridge.registerHandler('hide_view', function(data, responseCallback) {
-                                                         console.log("hide_view called with:", data)
-                                                         
-                                                         $("#json").hide();
-                                                         
-                                                         responseCallback({"success": true})
-                                            })
-                                  
-                               })
+
+      setupWebViewJavascriptBridge(function(bridge) {
+          bridge.registerHandler('json_view', function(data, responseCallback) {
+              console.log("json_view called with:", data);
+
+              $("#json").show();
+              $("#json").JSONView(data);
+
+              responseCallback({"success": true})
+          });
+          bridge.registerHandler('json_view_collapsed', function(data, responseCallback) {
+              console.log("json_view_collapsed called with:", data);
+
+              $("#json").show();
+              $("#json").JSONView(data, {collapsed:true});
+
+              responseCallback({"success": true})
+          });
+          bridge.registerHandler('hide_view', function(data, responseCallback) {
+              console.log("hide_view called with:", data);
+
+              $("#json").hide();
+
+              responseCallback({"success": true})
+          });
+      })
   </script>
 </head>
 <body>

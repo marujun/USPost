@@ -67,10 +67,8 @@
     
     // Do any additional setup after loading the view.
     [_textField setFont:[NSFont systemFontOfSize:13]];
-    [_textView setFont:[NSFont systemFontOfSize:13]];
     
     _textField.placeholderString = @"http://api.us.com/chat?uid=101";
-    [_textView setString:@"{\n     \n}"];
     
     DMJSONResponseSerializer *responseSerializer = [DMJSONResponseSerializer serializer];
     responseSerializer.acceptableContentTypes = nil;
@@ -82,15 +80,19 @@
     self.requestBridge = [WebViewJavascriptBridge bridgeForWebView:_requestWebView];
     self.responseBridge = [WebViewJavascriptBridge bridgeForWebView:_responseWebView];
     
-    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"jsonview"];
-    NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-    NSURLRequest* request = [NSURLRequest requestWithURL:fileURL];
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"jsoneditor"];
+    NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:filePath]];
+    [[_requestWebView mainFrame] loadRequest:request];  //webview 初始宽度最低为400px，否则无法显示
     
     [self.indicatorView startAnimation:nil];
     self.indicatorView.hidden = YES;
     
-    [[_requestWebView mainFrame] loadRequest:request];
+    filePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"jsonview"];
+    request = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:filePath]];
     [[_responseWebView mainFrame] loadRequest:request];
+    
+//    _textField.stringValue = @"http://52.69.175.163:9982/Moca/Chat/Post?sessionKey=5638f246dd853d8e2d8ff038945c9e72cab1c61f&loginUid=0D27FCC8&deviceId=83edb03e71566243e1eab69f50d04b98cc9e3442&os=iOS&version=1";
+//    [self.requestBridge callHandler:@"set_json" data:@{@"to":@"F69AA91C",@"type":@(1),@"payload":@{@"uid":@"0D27FCC8",@"content":@"happy in",@"type":@(0),@"name":@"极致"}}];
 }
 
 - (void)setRepresentedObject:(id)representedObject {
@@ -101,24 +103,27 @@
 
 - (IBAction)sendButtonAction:(NSButton *)sender
 {
-    _textView.string = [_textView.string stringByReplacingOccurrencesOfString:@"”" withString:@"\""];
-    _textView.string = [_textView.string stringByReplacingOccurrencesOfString:@"“" withString:@"\""];
     _textField.stringValue = [_textField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     //处理URL中的中文
     NSString *url = [_textField.stringValue stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSDictionary *body = [_textView.string object];
-    
     if (!url || !url.length || ![NSURL URLWithString:url]) {
-        [self.requestBridge callHandler:@"json_view" data:@{@"error":@"URL为空或者格式不正确"}];
+        NSAlert *alertSheet = [NSAlert alertWithMessageText:@"提示" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"URL为空或者格式不正确，请重新输入！！！"];
+        [alertSheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
+            // check returnCode here
+        }];
+        
         return;
     }
     
-    if (_textView.string.length && !body) {
-        [self.requestBridge callHandler:@"json_view" data:@{@"error":@"Body格式不正确，请重新输入"}];
-        return;
-    }
-    
+    //json格式不对时 callback 不会被调用
+    [self.requestBridge callHandler:@"get_json" data:nil responseCallback:^(id responseData) {
+        [self startRequestWithUrl:url body:responseData];
+    }];
+}
+
+- (void)startRequestWithUrl:(NSString *)url body:(NSDictionary *)body
+{
     if (_sessionManager.dataTasks.count) {
         [[_sessionManager.dataTasks lastObject] cancel];
     }
@@ -144,14 +149,8 @@
         [queryDic setValue:item.value forKey:item.name];
     }
     
-    [self.requestBridge callHandler:@"json_view" data:_textView.string];
-//    [self.requestBridge callHandler:@"json_view_collapsed" data:@{@"body":body?:@{},
-//                                                                  @"method":request.HTTPMethod,
-//                                                                  @"query":queryDic,
-//                                                                  @"header":request.allHTTPHeaderFields}];
-    
-    
     NSLog(@"request url: %@",request.URL.absoluteString);
+    NSLog(@"request body: %@",body);
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.indicatorView.hidden = NO;

@@ -26,6 +26,7 @@
 
 @property (weak) IBOutlet WebView *requestWebView;
 @property (weak) IBOutlet WebView *responseWebView;
+@property (weak) IBOutlet WebView *htmlWebView;
 
 @property WebViewJavascriptBridge *requestBridge;
 @property WebViewJavascriptBridge *responseBridge;

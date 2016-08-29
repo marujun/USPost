@@ -68,7 +68,7 @@
     // Do any additional setup after loading the view.
     [_textField setFont:[NSFont systemFontOfSize:13]];
     
-    _textField.placeholderString = @"http://api.us.com/chat?uid=101";
+    _textField.placeholderString = @"http://api.us.com/chat";
     
     DMJSONResponseSerializer *responseSerializer = [DMJSONResponseSerializer serializer];
     responseSerializer.acceptableContentTypes = nil;
@@ -86,13 +86,14 @@
     
     [self.indicatorView startAnimation:nil];
     self.indicatorView.hidden = YES;
+    self.htmlWebView.hidden = YES;
     
     filePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"jsonview"];
     request = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:filePath]];
     [[_responseWebView mainFrame] loadRequest:request];
     
-//    _textField.stringValue = @"http://52.69.175.163:9982/Moca/Chat/Post?sessionKey=5638f246dd853d8e2d8ff038945c9e72cab1c61f&loginUid=0D27FCC8&deviceId=83edb03e71566243e1eab69f50d04b98cc9e3442&os=iOS&version=1";
-//    [self.requestBridge callHandler:@"set_json" data:@{@"to":@"F69AA91C",@"type":@(1),@"payload":@{@"uid":@"0D27FCC8",@"content":@"happy in",@"type":@(0),@"name":@"极致"}}];
+//    _textField.stringValue = @"http://hoootao.com/api/user/demo";
+//    [self.requestBridge callHandler:@"set_json" data:@{ @"ip": @"192.168.2.59", @"time": @"1472433398670"}];
 }
 
 - (void)setRepresentedObject:(id)representedObject {
@@ -128,18 +129,12 @@
         [[_sessionManager.dataTasks lastObject] cancel];
     }
     
-    NSMutableURLRequest *request;
-    if (body && body.count) {
-        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
-        [request setHTTPMethod:@"POST"];
-        [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:body options:0 error:nil]];
-    }
-    else {
-        AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
-        request = [serializer requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
-    }
-    [request setTimeoutInterval:20];
+    AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
+    NSMutableURLRequest *request = [serializer requestWithMethod:@"POST"
+                                                       URLString:url
+                                                      parameters:body
+                                                           error:nil];
+    [request setTimeoutInterval:30];
     [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     
     NSMutableDictionary *queryDic = [NSMutableDictionary dictionary];
@@ -154,6 +149,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.indicatorView.hidden = NO;
+        self.htmlWebView.hidden = YES;
         [self.responseBridge callHandler:@"hide_view" data:nil];
     });
     
@@ -165,7 +161,13 @@
             [self.responseBridge callHandler:@"json_view" data:responseObject];
         }
         else if (responseObject && [responseObject length]) {
-            [self.responseBridge callHandler:@"json_view" data:@{@"error":responseObject}];
+            if ([responseObject hasPrefix:@"<!DOCTYPE html>"]) {
+                self.htmlWebView.hidden = NO;
+                [[self.htmlWebView mainFrame] loadHTMLString:responseObject baseURL:request.URL];
+            }
+            else {
+                [self.responseBridge callHandler:@"json_view" data:@{@"error":responseObject}];
+            }
         }
         else {
             [self.responseBridge callHandler:@"json_view" data:@{@"error":[error.userInfo valueForKey:NSLocalizedDescriptionKey]}];

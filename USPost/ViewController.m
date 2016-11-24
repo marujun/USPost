@@ -147,6 +147,11 @@
     NSLog(@"request url: %@",request.URL.absoluteString);
     NSLog(@"request body: %@",body);
     
+    if (![_responseWebView.mainFrameURL hasSuffix:@"jsonview/index.html"]) {
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"jsonview"];
+        [[_responseWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:filePath]]];
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         self.indicatorView.hidden = NO;
         self.htmlWebView.hidden = YES;
